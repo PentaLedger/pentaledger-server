@@ -1,5 +1,5 @@
 # Build Stage
-FROM golang:1.21 AS builder
+FROM golang:1.23 AS builder
 WORKDIR /app
 
 # Copy and download dependencies
@@ -8,7 +8,7 @@ RUN go mod download
 
 # Copy the source code and build the binary
 COPY . .
-RUN go build -o app .
+RUN go build -o app ./cmd/api
 
 # Run Stage
 FROM debian:bookworm-slim
