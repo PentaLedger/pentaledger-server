@@ -82,6 +82,16 @@ func main() {
 
 	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
 
+	// Check if DSN is empty
+	if cfg.db.dsn == "" {
+		// Get it from the environment
+		cfg.db.dsn = os.Getenv("PENTALEDGER_DB_DSN")
+	}
+
+	// Print the final DSN value
+	logger.Info("Database DSN:")
+	logger.Info(cfg.db.dsn)
+
 	db, err := openDB(cfg)
 	if err != nil {
 		logger.Error(err.Error())
@@ -106,6 +116,7 @@ func main() {
 }
 
 func openDB(cfg config) (*sql.DB, error) {
+
 	db, err := sql.Open("postgres", cfg.db.dsn)
 	if err != nil {
 		return nil, err
